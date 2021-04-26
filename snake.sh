@@ -92,7 +92,7 @@ do
 			(( currentX-- ))
 			;;
 	esac
-	sleep 0.02
+	sleep 0.1
 	if [[ $currentX -eq 0 || $currentY -eq 0 || $currentX -gt $COLUMNS || $currentY -gt $LINES || $(echo "$snake" | grep "^$currentY;$currentX$") != "" ]]
 	then
 		break
