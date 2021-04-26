@@ -48,42 +48,33 @@ do
 	while [[ $? -eq 0 ]]
 	do
 		input=$(dd if=/dev/stdin bs=1 count=1 2> /dev/null)
-		if [[ "$input" == "$escape" ]]
-		#because bash really sucks at escaping strings
-		then
-			key=$(dd if=/dev/stdin bs=1 count=2 2> /dev/null)
-#This variable name is pretty unclear, so let me explain. Each individual arrow key isn't
-#its own individual ascii character. When you press the up arrow, 3 characters are actually
-#sent, 0x1b[A, down is 0x1b[B, right is 0x1b[C, and left is 0x1b[D. 0x1b, or \033 is the
-#character sent when the escape key is pressed. Basically, you detect when escape input is
-#sent, and listen for the identifying key.
-			case "$key" in
-				\[A)
-					if [[ $oldDirection != $DOWN ]]
-					then
-						direction=$UP
-					fi
-					;;
-				\[B)
-					if [[ $oldDirection != $UP ]]
-					then
-						direction=$DOWN
-					fi
-					;;
-				\[C)
-					if [[ $oldDirection != $LEFT ]]
-					then
-						direction=$RIGHT
-					fi
-					;;
-				\[D)
-					if [[ $oldDirection != $RIGHT ]]
-					then
-						direction=$LEFT
-					fi
-					;;
-			esac
-		fi
+		case "$input" in
+			A)
+				if [[ $oldDirection != $DOWN ]]
+				then
+					direction=$UP
+				fi
+				;;
+			B)
+				if [[ $oldDirection != $UP ]]
+				then
+					direction=$DOWN
+				fi
+				;;
+			C)
+				if [[ $oldDirection != $LEFT ]]
+				then
+					direction=$RIGHT
+				fi
+				;;
+			D)
+				if [[ $oldDirection != $RIGHT ]]
+				then
+					direction=$LEFT
+				fi
+				;;
+		esac
+#When you press the up arrow on your keyboard, 0x1b[A is actually what's sent.
 		read -t 0
 	done
 
@@ -101,7 +92,7 @@ do
 			(( currentX-- ))
 			;;
 	esac
-	sleep 0.2
+	sleep 0.02
 	if [[ $currentX -eq 0 || $currentY -eq 0 || $currentX -gt $COLUMNS || $currentY -gt $LINES || $(echo "$snake" | grep "^$currentY;$currentX$") != "" ]]
 	then
 		break
