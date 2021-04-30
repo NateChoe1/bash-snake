@@ -19,6 +19,8 @@ stty -echo
 #don't print stdin to the terminal
 echo -e "\033[?25l"
 #hide the cursor
+echo -e "\033[?1049h"
+#enable the secondary screen buffer
 
 snake=""
 #the first line is the tail, the last line is the head
@@ -116,7 +118,7 @@ done
 stty cooked
 stty echo
 echo -e "\033[?25h"
+echo -e "\033[?1049l"
 #undo the stuff from the beginning
 
-clear
 echo "You lost. Final score: $length"
